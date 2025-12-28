@@ -137,25 +137,24 @@ CPS_TO_USVH = 0.30
 This project is not a certified radiation measurement device.
 Do not use it for safety-critical, medical, or regulatory applications.
 
+## License
+
+GNU General Public License v3.0
+
+
 
 ## 📚 Документация / Documentation
 
 ### 🇷🇺 Русский
 
-- 📐 [Архитектура проекта](docs/architecture.md)
-- 🔁 [Блок-схема алгоритма](docs/flowchart.md)
-- 📊 [Математическая модель](docs/math_model.md)
-- ⚠️ [Ограничения и допущения](docs/limitations.md)
+-  [Архитектура проекта](docs/architecture.md)
+-  [Блок-схема алгоритма](docs/flowchart.md)
+-  [Математическая модель](docs/math_model.md)
+-  [Ограничения и допущения](docs/limitations.md)
 
 ### us English
 
-- 📐 [Project architecture](docs/architecture.md)
-- 🔁 [Firmware flowchart](docs/flowchart.md)
-- 📊 [Mathematical model](docs/math_model.md)
-- ⚠️ [Limitations and assumptions](docs/limitations.md)
-
-
-
-## License
-
-GNU General Public License v3.0
+-  [Project architecture](docs/architecture.md)
+-  [Firmware flowchart](docs/flowchart.md)
+-  [Mathematical model](docs/math_model.md)
+-  [Limitations and assumptions](docs/limitations.md)
