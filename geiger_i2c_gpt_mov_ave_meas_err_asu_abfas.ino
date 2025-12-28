@@ -141,7 +141,7 @@ void loop() {
   */
 
   if (nowMillis - lastSecondMillis >= 1000) {
-    lastSecondMillis = nowMillis;
+    lastSecondMillis += 1000;
 
     /*
       ============================
