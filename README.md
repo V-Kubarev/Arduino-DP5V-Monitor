@@ -102,6 +102,15 @@ Arduino Uno / Nano (ATmega328P)
 *   LCD SDA: A4
 *   LCD SCL: A5
 
+> ⚠️ **ВАЖНО! Прочтите перед подключением:**
+>
+> 1.  **Пин `D2` используется как внешнее прерывание (INT0)**, что гарантирует надёжный подсчёт всех импульсов.
+> 2.  Для пина `D2` в коде включен **внутренний подтягивающий резистор (`INPUT_PULLUP`)**. Это означает, что для регистрации импульса вход должен быть "замкнут" на землю (GND).
+> 3.  **Аудиовыход дозиметра ДП-5В НЕ ЯВЛЯЕТСЯ TTL-совместимым сигналом!** Напрямую подключать его к Arduino опасно. Используйте простейшую схему согласования:
+>     *   Ограничительный резистор на входе.
+>     *   Защитный диод, подключенный к GND.
+>     *   Идеальный вариант — простой транзисторный ключ (формирователь импульсов), который будет выдавать чистый 0-5В сигнал.
+
 ## 🇺🇸 Pin Configuration
 
 *   Geiger pulse input: D2 (INT0)
@@ -109,6 +118,15 @@ Arduino Uno / Nano (ATmega328P)
 *   Buzzer: D7
 *   LCD SDA: A4
 *   LCD SCL: A5
+
+> ⚠️ **IMPORTANT! Read before connecting:**
+>
+> 1.  **Pin `D2` is used as an external interrupt (INT0)**, which ensures reliable counting of all pulses.
+> 2.  The code enables the **internal pull-up resistor (`INPUT_PULLUP`)** for pin `D2`. This means that to register a pulse, the input must be pulled to ground (GND).
+> 3.  **The audio output of the DP-5V dosimeter is NOT a TTL-compatible signal!** Connecting it directly to the Arduino is dangerous. Use a simple interface circuit:
+>     *   A current-limiting resistor on the input.
+>     *   A protection diode connected to GND.
+>     *   The ideal option is a simple transistor switch (pulse shaper) that will output a clean 0-5V signal.
 
 ## 🇷🇺 Калибровка
 
