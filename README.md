@@ -211,7 +211,7 @@ You use this project and code at your own risk. The author is not responsible fo
 
 GNU General Public License v3.0
 
-
+---
 
 ## Документация / Documentation
 
