@@ -186,10 +186,26 @@ CPS_TO_USVH = 0.34
 
 Данный проект не является сертифицированным измерительным прибором и не должен использоваться для задач, связанных с безопасностью, медициной или радиационным контролем.
 
+**Для чего подходит этот прибор:**
+*   Сравнение относительных уровней радиации в разных местах.
+*   Поиск и обнаружение источников ионизирующего излучения.
+*   Изучение принципов работы дозиметрических приборов.
+*   Эксперименты в области физики и электроники.
+
+Вы используете данный проект и код на свой страх и риск. Автор не несёт ответственности за любые последствия, связанные со сборкой и эксплуатацией данного устройства.
+
 ## 🇺🇸 Disclaimer
 
 This project is not a certified radiation measurement device.
 Do not use it for safety-critical, medical, or regulatory applications.
+
+**What this device is suitable for:**
+*   Comparing relative radiation levels in different places.
+*   Searching for and detecting sources of ionizing radiation.
+*   Studying the principles of how dosimetric instruments work.
+*   Experiments in physics and electronics.
+
+You use this project and code at your own risk. The author is not responsible for any consequences related to the assembly and operation of this device.
 
 ## License
 
