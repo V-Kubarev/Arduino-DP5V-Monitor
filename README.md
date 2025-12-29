@@ -151,6 +151,17 @@ Arduino Uno / Nano (ATmega328P)
 Используемый коэффициент:
 CPS_TO_USVH = 0.34
 
+> ⚠️ **ВНИМАНИЕ!** Данный коэффициент **НЕ универсален**. Его значение зависит от конкретного экземпляра счётчика Гейгера в дозиметре, его возраста, геометрии измерения и других факторов. Копирование этого значения даст лишь очень приблизительный результат.
+
+**Как откалибровать прибор самостоятельно:**
+1.  Поместите ваш прибор и эталонный (проверенный) дозиметр в условия стабильного радиационного фона, вдали от источников.
+2.  Запишите показания **эталонного дозиметра** в мкЗв/ч (например, `0.15 мкЗв/ч`).
+3.  Включите ваш прибор и дождитесь стабилизации показаний `CPS` (через 1-2 минуты). Запишите это значение (например, `0.51 CPS`).
+4.  Рассчитайте ваш персональный коэффициент по формуле:
+    **Коэффициент = (Показания_эталона, мкЗв/ч) / (Ваши_показания, CPS)**
+    *Пример: 0.15 / 0.51 = 0.294*
+5.  Введите полученное значение в переменную `CPS_TO_USVH` и загрузите скетч снова.
+
 ## 🇺🇸 Calibration
 
 The CPS to µSv/h conversion factor depends on the specific tube and measurement conditions.
@@ -159,6 +170,17 @@ The default value is calibrated to background radiation using a DKG-03D referenc
 
 Used conversion factor:
 CPS_TO_USVH = 0.34
+
+> ⚠️ **ATTENTION!** This conversion factor is **NOT universal**. Its value depends on the specific Geiger tube in your dosimeter, its age, measurement geometry, and other factors. Simply copying this value will yield only a very approximate result.
+
+**How to calibrate the device yourself:**
+1.  Place your device and a reference (verified) dosimeter in a stable background radiation environment, away from any sources.
+2.  Record the reading of the **reference dosimeter** in µSv/h (e.g., `0.15 µSv/h`).
+3.  Turn on your device and wait for the `CPS` reading to stabilize (after 1-2 minutes). Record this value (e.g., `0.51 CPS`).
+4.  Calculate your personal conversion factor using the formula:
+    **Factor = (Reference_Reading, µSv/h) / (Your_Reading, CPS)**
+    *Example: 0.15 / 0.51 = 0.294*
+5.  Enter the calculated value into the `CPS_TO_USVH` variable and upload the sketch again.
 
 ## 🇷🇺 Предупреждение
 
