@@ -90,7 +90,7 @@ This project is intended for educational and experimental use.
 
 *   Кнопка управления
 
-**Согласующая схема** для безопасного подключения дозиметра к Arduino (опционально).
+*   **Согласующая схема** для безопасного подключения дозиметра к Arduino (опционально).
 
 ## 🇺🇸 Hardware
 
@@ -106,7 +106,7 @@ Arduino Uno / Nano (ATmega328P)
 
 *   Control button
 
-**Interface circuit** for safely connecting the dosimeter to the Arduino (optional).
+*   **Interface circuit** for safely connecting the dosimeter to the Arduino (optional).
 
 ## 🇷🇺 Распиновка
 
