@@ -82,7 +82,7 @@ This project is intended for educational and experimental use.
 
 *   Армейский дозиметр ДП-5В
 
-*   Прямое подключение к разъёму наушников
+*   Прямое подключение к разъёму наушников (на свой страх и риск)
 
 *   LCD 16×2 с I2C (адрес 0x27)
 
@@ -90,7 +90,7 @@ This project is intended for educational and experimental use.
 
 *   Кнопка управления
 
-*   **Согласующая схема** для безопасного подключения дозиметра к Arduino (опционально).
+*   **Согласующая схема** для безопасного подключения дозиметра к Arduino (желательно).
 
 ## 🇺🇸 Hardware
 
@@ -98,7 +98,7 @@ Arduino Uno / Nano (ATmega328P)
 
 *   DP-5V military radiation survey meter
 
-*   Direct connection to headphone jack
+*   Direct connection to headphone jack (at your own risk)
 
 *   16×2 I2C LCD (address 0x27)
 
@@ -106,7 +106,7 @@ Arduino Uno / Nano (ATmega328P)
 
 *   Control button
 
-*   **Interface circuit** for safely connecting the dosimeter to the Arduino (optional).
+*   **Interface circuit** for safely connecting the dosimeter to the Arduino (desirable).
 
 ## 🇷🇺 Распиновка
 
