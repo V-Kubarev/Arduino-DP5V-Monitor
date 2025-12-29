@@ -8,7 +8,8 @@ Version: 0.2.0
 
 Данная прошивка предназначена для работы с армейским дозиметром ДП-5В и платой Arduino (Uno / Nano).
 
-Arduino подключается напрямую к разъёму наушников ДП-5В.
+**ВОЗМОЖНО** подключение Arduino напрямую к разъёму наушников ДП-5В(без гарантий).
+
 С этого выхода снимаются импульсы счётчика Гейгера, которые обрабатываются с помощью аппаратного прерывания.
 
 Для уменьшения ошибок счёта, вызванных дребезгом, повторными срабатываниями и помехами, в коде реализован программный антидребезг (мёртвое время).
@@ -21,7 +22,8 @@ Arduino подключается напрямую к разъёму наушни
 
 This firmware is designed to work with the DP-5V military radiation survey meter and an Arduino board (Uno / Nano).
 
-Arduino is connected directly to the DP-5V headphone output.
+**IT IS POSSIBLE** to connect Arduino directly to the DP-5V headphone jack (no guarantees).
+
 Geiger counter pulses are taken from this output and processed using a hardware interrupt.
 
 To reduce counting errors caused by bounce, noise, and repeated triggers, a software dead time (anti-bounce filter) is implemented.
@@ -47,6 +49,10 @@ This project is intended for educational and experimental use.
 *   Звуковой щелчок на каждый импульс
 
 *   Программный антидребезг импульсов
+  
+*   Вывод информации на стандартный дисплей **I2C LCD 16x2**.
+
+*   Возможность **калибровки** по эталонному дозиметру для повышения точности.
 
 ## 🇺🇸 Key Features
 
@@ -66,6 +72,10 @@ This project is intended for educational and experimental use.
 
 *   Software dead time filtering
 
+*   Information output to a standard **I2C LCD 16x2** display.
+
+*   Option for **calibration** against a reference dosimeter to improve accuracy.
+
 ## 🇷🇺 Аппаратная часть
 
 *   Arduino Uno / Nano (ATmega328P)
@@ -80,6 +90,8 @@ This project is intended for educational and experimental use.
 
 *   Кнопка управления
 
+**Согласующая схема** для безопасного подключения дозиметра к Arduino (опционально).
+
 ## 🇺🇸 Hardware
 
 Arduino Uno / Nano (ATmega328P)
@@ -93,6 +105,8 @@ Arduino Uno / Nano (ATmega328P)
 *   Piezo buzzer (optional)
 
 *   Control button
+
+**Interface circuit** for safely connecting the dosimeter to the Arduino (optional).
 
 ## 🇷🇺 Распиновка
 
