@@ -135,7 +135,7 @@ Arduino Uno / Nano (ATmega328P)
 Значение по умолчанию откалибровано по фону с использованием дозиметра ДКГ-03Д совместно с ДП-5В.
 
 Используемый коэффициент:
-CPS_TO_USVH = 0.30
+CPS_TO_USVH = 0.34
 
 ## 🇺🇸 Calibration
 
@@ -144,7 +144,7 @@ The CPS to µSv/h conversion factor depends on the specific tube and measurement
 The default value is calibrated to background radiation using a DKG-03D reference dosimeter together with the DP-5V.
 
 Used conversion factor:
-CPS_TO_USVH = 0.30
+CPS_TO_USVH = 0.34
 
 ## 🇷🇺 Предупреждение
 
