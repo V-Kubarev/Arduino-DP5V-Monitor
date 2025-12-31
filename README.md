@@ -211,6 +211,7 @@ GNU General Public License v3.0
 
 ### 🇷🇺 Русский
 
+-  [Принципы работы прошивки](docs/SOFTWARE.md)
 -  [Архитектура проекта](docs/architecture.md)
 -  [Блок-схема алгоритма](docs/flowchart.md)
 -  [Математическая модель](docs/math_model.md)
@@ -218,6 +219,7 @@ GNU General Public License v3.0
 
 ### us English
 
+-  [Operating principles of firmware](docs/SOFTWARE.md)
 -  [Project architecture](docs/architecture.md)
 -  [Firmware flowchart](docs/flowchart.md)
 -  [Mathematical model](docs/math_model.md)
