@@ -105,9 +105,6 @@ const int ledPin = LED_BUILTIN;
 // Длительность вспышки в миллисекундах.
 const unsigned long flashDuration = 20;
 
-// Флаг, который устанавливается в прерывании. Должен быть volatile.
-volatile bool flashRequested = false;
-
 // Переменная для хранения времени включения светодиода.
 unsigned long ledOnTime = 0;
 
@@ -206,7 +203,6 @@ void loop() {
     digitalWrite(ledPin, HIGH);  // Включаем светодиод
     ledIsOn = true;              // Запоминаем, что он включен
     ledOnTime = millis();        // Засекаем время включения
-    flashRequested = false;      // Сбрасываем флаг, чтобы не включить снова
     tone(BUZZER_PIN, 3000, 5);
     beepFlag = false;
   }
