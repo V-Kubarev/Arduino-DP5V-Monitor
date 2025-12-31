@@ -49,9 +49,7 @@ This is the actual “emergency” function. It must be as short and fast as pos
 ```
 void geigerISR() {
 // ... (check for software dead time) ...
-```
 
-```
  // 1. Increment the total pulse counter
  pulseCount++;
 
