@@ -219,7 +219,7 @@ GNU General Public License v3.0
 
 ### us English
 
--  [Operating principles of firmware](docs/SOFTWARE.md)
+-  [Operating principles of firmware](docs/SOFTWARE_EN.md)
 -  [Project architecture](docs/architecture.md)
 -  [Firmware flowchart](docs/flowchart.md)
 -  [Mathematical model](docs/math_model.md)
