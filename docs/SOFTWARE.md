@@ -44,10 +44,10 @@
   Сначала вычисляется количество импульсов, произошедших за последнюю секунду, а затем это значение записывается в текущую ячейку буфера. Указатель на
   текущую ячейку хранится в переменной bufferIndex.
 
-   1 // Вычисляем импульсы за прошедшую секунду
-   2 unsigned int pulsesThisSecond = currentCount - lastPulseSnapshot;
-   3 // Записываем их в текущую ячейку
-   4 cpsBuffer[bufferIndex] = pulsesThisSecond;
+   * 1 // Вычисляем импульсы за прошедшую секунду
+   * 2 unsigned int pulsesThisSecond = currentCount - lastPulseSnapshot;
+   * 3 // Записываем их в текущую ячейку
+   * 4 cpsBuffer[bufferIndex] = pulsesThisSecond;
 
   4. Сдвиг окна
 
