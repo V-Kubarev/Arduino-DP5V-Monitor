@@ -30,8 +30,8 @@
 
   В коде создается массив, который хранит количество импульсов, зарегистрированное за каждую из последних 30 секунд.
 
-   1 #define WINDOW_SECONDS 30
-   2 unsigned int cpsBuffer[WINDOW_SECONDS] = {0};
+   * #define WINDOW_SECONDS 30
+   * unsigned int cpsBuffer[WINDOW_SECONDS] = {0};
 
   Этот массив можно представить как 30 ячеек памяти, каждая для своей секунды.
 
@@ -44,10 +44,10 @@
   Сначала вычисляется количество импульсов, произошедших за последнюю секунду, а затем это значение записывается в текущую ячейку буфера. Указатель на
   текущую ячейку хранится в переменной bufferIndex.
 
-   * 1 // Вычисляем импульсы за прошедшую секунду
-   * 2 unsigned int pulsesThisSecond = currentCount - lastPulseSnapshot;
-   * 3 // Записываем их в текущую ячейку
-   * 4 cpsBuffer[bufferIndex] = pulsesThisSecond;
+   * // Вычисляем импульсы за прошедшую секунду
+   * unsigned int pulsesThisSecond = currentCount - lastPulseSnapshot;
+   * // Записываем их в текущую ячейку
+   * cpsBuffer[bufferIndex] = pulsesThisSecond;
 
   4. Сдвиг окна
 
@@ -62,10 +62,10 @@
 
   Каждую секунду, после обновления буфера, программа заново вычисляет сумму всех значений в 30 ячейках.
 
-   1 unsigned long windowPulses = 0;
-   2 for (unsigned int i = 0; i < WINDOW_SECONDS; i++) {
-   3   windowPulses += cpsBuffer[i];
-   4 }
+   * unsigned long windowPulses = 0;
+   * for (unsigned int i = 0; i < WINDOW_SECONDS; i++) {
+   *   windowPulses += cpsBuffer[i];
+   * }
   Полученное значение windowPulses — это общее количество импульсов за последние 30 секунд. Для нахождения среднего значения в секунду (CPS), эта сумма
   делится на длительность окна.
 
