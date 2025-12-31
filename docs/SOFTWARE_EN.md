@@ -1,6 +1,6 @@
- Firmware Operating Principles
+#  Firmware Operating Principles
   ---
-  Pulse Counting Principle: Hardware Interrupts
+ ## Pulse Counting Principle: Hardware Interrupts
   Reliably counting every pulse from the Geiger counter is the most fundamental task of the dosimeter. To solve this, the project uses the hardware
   interrupt mechanism, which is the most accurate and efficient way to register fast, asynchronous events.
   Problem: Unpredictability and Brevity of Pulses
@@ -71,7 +71,7 @@
    5  interrupts(); // Immediately re-enable interrupts
   This ensures that the pulseCount value is read correctly and without corruption.
   ---
-  Principle of Software "Dead Time"
+  ## Principle of Software "Dead Time"
   To ensure high accuracy in pulse counting, a software "dead time" mechanism is implemented in the firmware. Its main task is to filter out false
   triggers caused by the characteristics of the DP-5V dosimeter's analog path.
   Problem: "Dirty" Signal from the Audio Output
@@ -134,7 +134,7 @@
   Thus, this simple but effective filter ensures that only the first front of a "dirty" signal is counted, and all its subsequent "tails" are ignored,
   providing counting accuracy.
   ---
-  Sliding Window Algorithm
+  ## Sliding Window Algorithm
   To obtain stable and reliable dose rate readings, the project uses a data averaging algorithm based on the sliding window method. A detailed
   description of its operation is provided below.
   Problem: Random Nature of Radiation
@@ -244,7 +244,7 @@
   This is why, to achieve maximum accuracy, each assembled device should ideally be calibrated individually, as even two identical Geiger counters can
   have slightly different sensitivities.
   ---
-  Statistical Error Calculation Algorithm
+  ## Statistical Error Calculation Algorithm
   In addition to the dose rate value itself, the device also calculates and displays the relative statistical error of the measurement as a percentage.
   This parameter shows how much the current readings can be "trusted."
   Problem: Uncertainty of Random Events
@@ -302,7 +302,7 @@
    - Low error (e.g., < 5%): Occurs at high radiation background when hundreds or thousands of pulses are registered in 30 seconds. This indicates that
      the measurement is statistically significant, and the dose rate readings are reliable and stable.
   ---
-  Dose Accumulation Algorithm
+  ## Dose Accumulation Algorithm
   One of the key functions of the device is to calculate the total dose received during the measurement time. This process is called dose accumulation
   and runs in parallel with the measurement of the current dose rate.
   Purpose and Differences from Dose Rate
@@ -358,7 +358,7 @@
    4  accumulationTime_s = 0;
    5  }
   ---
-  Principle of Mode Switching and Control
+  ## Principle of Mode Switching and Control
   To interact with the dosimeter, a single button is used, which is capable of performing two different functions depending on the duration of the
   press. The control of display modes and measurement reset is implemented using a simple state machine that tracks the button's state.
   Task: A Multi-function Button
@@ -453,7 +453,7 @@
    6   // (Accumulation time, accumulated dose)
    7  }
   ---
-  Principle of Displaying Data on Screen
+  ## Principle of Displaying Data on Screen
   To display information, the project uses a standard 16x2 character LCD with an I2C interface. The data output logic is organized in such a way that
   all necessary information fits on the small screen, and the interface remains clean and readable.
   Task: An Informative and Clean Interface
