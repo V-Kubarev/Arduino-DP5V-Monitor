@@ -28,16 +28,14 @@ This guarantees that not a single pulse, even the shortest one, will be missed, 
 #### 1. Configuration in `setup()`
 
 In the `setup()` function, we “tell” the microcontroller which pin to listen to and which function to call.
-
+```
 // Configure the pin as an input with a pull-up resistor to Vcc.
 // In the normal state it will be HIGH (logic 1).
 pinMode(GEIGER_PIN, INPUT_PULLUP);
 
 // “Attach” an interrupt to this pin
 attachInterrupt(digitalPinToInterrupt(GEIGER_PIN), geigerISR, RISING);
-
-vbnet
-Copy code
+```
 
 Let’s break down the `attachInterrupt` command:
 
@@ -48,12 +46,12 @@ Let’s break down the `attachInterrupt` command:
 #### 2. Interrupt Handler — `geigerISR()`
 
 This is the actual “emergency” function. It must be as short and fast as possible. You must not use `delay()` or long operations inside it.
-
+```
 void geigerISR() {
 // ... (check for software dead time) ...
+```
 
-cpp
-Copy code
+```
  // 1. Increment the total pulse counter
  pulseCount++;
 
@@ -61,9 +59,7 @@ Copy code
  beepFlag = true;
 }
 
-r
-Copy code
-
+```
 All it does is increment the `pulseCount` counter and set the `beepFlag` flag so that the main `loop()` knows it needs to make a sound and blink an LED.
 
 Variables that are used both in the interrupt and in the main loop (`pulseCount`, `beepFlag`) must be declared with the `volatile` keyword. This tells the compiler that the variable’s value can change at any time and prevents certain optimizations that could break the logic.
@@ -73,15 +69,13 @@ Variables that are used both in the interrupt and in the main loop (`pulseCount`
 The variable `pulseCount` has type `unsigned long` and occupies 4 bytes. Reading 4 bytes is not an atomic (instantaneous) operation. There is a tiny chance that an interrupt could occur right in the middle of reading this variable, resulting in an incorrect value.
 
 To avoid this, before reading `pulseCount` we temporarily disable all interrupts, and immediately after reading, we re-enable them.
-
+```
 unsigned long currentCount;
 
 noInterrupts(); // Disable interrupts
 currentCount = pulseCount; // Safely read the value
 interrupts(); // Immediately re-enable interrupts
-
-vbnet
-Copy code
+```
 
 This guarantees that the value of `pulseCount` is read correctly and without corruption.
 
@@ -118,19 +112,16 @@ This logic is fully implemented inside the interrupt handler function `geigerISR
 
 At the beginning of the code, the duration of the “insensitive period” is defined in microseconds.
 
-cpp
-Copy code
+```
    // 20,000 microseconds = 20 milliseconds
    #define DEAD_TIME_US 20000
-pgsql
-Copy code
+```
 
 20 ms is a time that is definitely longer than all “tails” and bounce effects, but still short enough not to miss the next real pulse at moderate radiation levels.
 
 #### 2. Logic Inside `geigerISR()`
 
-cpp
-Copy code
+```
     void geigerISR() {
       // Get the current time in microseconds
       unsigned long now = micros();
@@ -153,8 +144,7 @@ Copy code
       // the if condition is not met, and the function simply exits,
       // completely IGNORING the current interrupt trigger.
     }
-sql
-Copy code
+```
 
 Thus, this simple but effective filter ensures that only the first edge of the “dirty” signal is counted, and all subsequent “tails” are ignored, ensuring counting accuracy.
 
@@ -185,12 +175,10 @@ For efficient implementation, a circular (ring) buffer is used.
 
 The code creates an array that stores the number of pulses registered in each of the last 30 seconds.
 
-cpp
-Copy code
+```
 #define WINDOW_SECONDS 30
 unsigned int cpsBuffer[WINDOW_SECONDS] = {0};
-sql
-Copy code
+```
 
 This array can be imagined as 30 memory cells, each corresponding to one second.
 
@@ -201,45 +189,40 @@ Once per second, the main loop executes a block of code responsible for updating
 #### 3. Writing New Data
 
 First, the number of pulses that occurred during the last second is calculated, and then this value is written into the current buffer cell. The index of the current cell is stored in the variable `bufferIndex`.
-
+```
 // Calculate pulses for the past second
 unsigned int pulsesThisSecond = currentCount - lastPulseSnapshot;
 // Write them to the current cell
 cpsBuffer[bufferIndex] = pulsesThisSecond;
-
-pgsql
-Copy code
+```
 
 #### 4. Window Shift
 
 After writing the new data, the `bufferIndex` pointer is moved to the next cell. To “wrap” the buffer, the modulo operator (%) is used.
-
+```
 bufferIndex = (bufferIndex + 1) % WINDOW_SECONDS;
+```
 
-pgsql
-Copy code
 
 When `bufferIndex` reaches the value 29, on the next iteration (29 + 1) % 30 results in 0. The pointer returns to the beginning of the array, and new data starts overwriting the oldest values. This is exactly how the “sliding” is implemented — old data is automatically “forgotten”.
 
 #### 5. Average Value Calculation (CPS)
 
 Each second, after updating the buffer, the program recalculates the sum of all values in the 30 cells.
-
+```
 unsigned long windowPulses = 0;
 for (unsigned int i = 0; i < WINDOW_SECONDS; i++) {
 windowPulses += cpsBuffer[i];
 }
+```
 
-pgsql
-Copy code
+
 
 The resulting value `windowPulses` is the total number of pulses over the last 30 seconds. To find the average value per second (CPS), this sum is divided by the window duration.
 
-arduino
-Copy code
+```
 float cps = windowPulses / (float)WINDOW_SECONDS;
-sql
-Copy code
+```
 
 This averaged CPS value is then used for all further calculations (dose rate, error, etc.).
 
@@ -276,7 +259,7 @@ Imagine trying to estimate roof damage from precipitation. Simply counting “im
 For simplicity, in this project, as in most consumer dosimeters, a linear calibration coefficient is used. This approach assumes that we are measuring radiation with a known or “average” energy spectrum (for example, natural background radiation).
 
 In code, this is implemented very simply:
-
+```
 // Coefficient defining how many "µSv/h" are in one "CPS"
 const float CPS_TO_USVH = 0.34;
 
@@ -285,8 +268,7 @@ const float CPS_TO_USVH = 0.34;
 // Dose rate calculation
 float doseRate_uSv = cps * CPS_TO_USVH;
 
-vbnet
-Copy code
+```
 
 This formula assumes that each registered “average” pulse per second (CPS) contributes the same predefined amount to the final dose rate.
 
@@ -350,16 +332,14 @@ To express this value as a percentage, we simply multiply the result by 100:
 #### 3. Calculation Code
 
 This formula is implemented directly in the code:
-
+```
 float errorPercent = 0.0;
 // Check that there were pulses to avoid division by zero
 if (windowPulses > 0) {
 // 100.0 / √N
 errorPercent = 100.0 / sqrt(windowPulses);
 }
-
-sql
-Copy code
+```
 
 ### Practical Meaning for the User
 
@@ -400,20 +380,16 @@ To find out how much dose was received in one second, we need to convert the hou
 #### 3. Summation (Accumulation)
 
 This small dose portion obtained per second is added to the total accumulated dose counter. This process repeats every second.
-
+```
 // doseRate_uSv has units [µSv/hour]
 // To get dose per second, divide by 3600
 accumulatedDose_uSv += doseRate_uSv / 3600.0;
-
-sql
-Copy code
+```
 
 At the same time, the total measurement time counter is incremented by one:
-
+```
 accumulationTime_s++;
-
-pgsql
-Copy code
+```
 
 #### 4. Process Continuity
 
@@ -422,15 +398,14 @@ A key feature is that this calculation occurs every second in the background, re
 ### Resetting Measurements
 
 When the button is held down for a long press, the `resetMeasurements()` function is called. It resets both the accumulated dose counter and the time counter, allowing a new measurement session to start from zero.
-
+```
 void resetMeasurements() {
 // ... (reset other variables)
 accumulatedDose_uSv = 0.0;
 accumulationTime_s = 0;
 }
+```
 
-yaml
-Copy code
 
 ---
 
@@ -453,8 +428,7 @@ To solve this task, button state tracking and timing measurements of how long it
 
 The following global variables are used to manage modes and button state:
 
-arduino
-Copy code
+```
 // Enumeration to store possible display modes
 enum DisplayMode {
   DISPLAY_MAIN,
@@ -467,53 +441,46 @@ DisplayMode displayMode = DISPLAY_MAIN;
 bool lastButtonState = HIGH;        // Previous button state
 unsigned long buttonPressTime = 0;  // Time when the button was pressed
 unsigned long lastButtonEvent = 0;  // Time of last event for debouncing
-pgsql
-Copy code
+```
 
 #### 2. Debouncing
 
 When a button is physically pressed, its contacts may close and open several times within a few milliseconds, creating “bounce”. To prevent a single press from being interpreted as multiple presses, a software debounce is implemented.
-
+```
 #define DEBOUNCE_MS 200 // Ignore new presses for 200 ms
 
 // ... in the main loop loop()
 if (buttonState == LOW && lastButtonState == HIGH &&
 nowMillis - lastButtonEvent > DEBOUNCE_MS) {
 
-ini
-Copy code
+
  buttonPressTime = nowMillis; // Record the press start time
  lastButtonEvent = nowMillis; // Update the last event time
 }
 
-sql
-Copy code
+```
 
 This code triggers only at the very first moment of pressing (when the state changes from HIGH to LOW) and only if more than 200 ms have passed since the last event.
 
 #### 3. Determining Press Duration
 
 The logic for determining the action triggers when the button is released.
-
+```
 // Triggers when the state changes from LOW to HIGH
 if (buttonState == HIGH && lastButtonState == LOW) {
 // Calculate how long the button was held
 unsigned long pressDuration = nowMillis - buttonPressTime;
 
-cpp
-Copy code
   // ... (logic for choosing the action follows)
 }
 
-nginx
-Copy code
+```
 
 #### 4. Short and Long Press Logic
 
 Inside the block that triggers on button release, we analyze the calculated `pressDuration`:
 
-cpp
-Copy code
+```
 #define LONG_PRESS_MS 1500 // Threshold for long press = 1.5 seconds
 
 // If the button was held longer than the threshold
@@ -526,8 +493,7 @@ else {
   // Switch the display screen
   displayMode = (displayMode == DISPLAY_MAIN) ? DISPLAY_ACCUM : DISPLAY_MAIN;
 }
-vbnet
-Copy code
+```
 
 #### 5. Mode Switching
 
@@ -540,7 +506,7 @@ This line reads as: “If the current mode (`displayMode`) is `DISPLAY_MAIN`, as
 ### Display Output Control
 
 At the end of the main `loop()`, there is a block that decides which information to display on the screen based on the current value of the `displayMode` variable. It works like a rendering “router”.
-
+```
 if (displayMode == DISPLAY_MAIN) {
 // Code to render the main screen
 // (CPS, B8, dose rate, error)
@@ -548,9 +514,8 @@ if (displayMode == DISPLAY_MAIN) {
 // Code to render the accumulated dose screen
 // (Accumulation time, accumulated dose)
 }
+```
 
-pgsql
-Copy code
 
 ---
 
@@ -565,27 +530,24 @@ The main task is to efficiently use the limited display space (2 lines of 16 cha
 ### Library Used
 
 Interaction with the display is handled through the popular `LiquidCrystal_I2C` library, which greatly simplifies sending commands and text to the display over the I2C bus.
-
+```
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-vbnet
-Copy code
+```
 
 ### Implementation in Code
 
 #### 1. Display Routing
 
 In the main `loop()`, inside the once-per-second processing block, there is an if-else structure that acts as a “router”. It checks the current value of the `displayMode` variable and, depending on it, calls the corresponding block of code to render the appropriate screen.
-
+```
 if (displayMode == DISPLAY_MAIN) {
 // Code to render the main screen...
 } else { // If displayMode == DISPLAY_ACCUM
 // Code to render the accumulated dose screen...
 }
-
-pgsql
-Copy code
+```
 
 #### 2. Cursor Control and Line Clearing
 
@@ -599,25 +561,21 @@ When displaying values of variable length (for example, number 100, then 99), �
 * Became: `CPS:990` (the zero remained from 100)
 
 To avoid this, a simple but effective technique is used: after printing the useful information, the line is padded with spaces to the end. This guarantees that any previous content on that line is completely erased.
-
+```
 // Example of clearing a line “tail”
 lcd.print(errorPercent, 1);
 lcd.print("% "); // <-- These spaces erase old characters
-
-shell
-Copy code
+```
 
 #### 3. Screen Descriptions
 
 ##### Screen 1: Main Measurements (DISPLAY_MAIN)
 
 Screen layout:
-
+```
 1 CPS:0.7 B8:42
 2 0.24uSv 12.1%
-
-vbnet
-Copy code
+```
 
 * **Top line:** Cursor is set to (0, 0). Static text `CPS:` is printed, followed by the `cps` value with one decimal place, then the text `B8:` and the integer value `b8Value`.
 * **Bottom line:** Cursor is set to (0, 1). The dose rate `doseRate_uSv` is printed with two decimal places, the unit `uSv`, and the relative error `errorPercent` with one decimal place and the `%` sign.
@@ -625,23 +583,19 @@ Copy code
 ##### Screen 2: Accumulated Dose (DISPLAY_ACCUM)
 
 Screen layout:
-
+```
 1 00:15:32
 2 0.0123 uSv
-
-pgsql
-Copy code
+```
 
 * **Top line:** Displays the total accumulation time.
   * First, the total number of seconds `accumulationTime_s` is broken down into hours, minutes, and seconds using integer division and the modulo operator (%).
   * Then each component is printed with logic that adds a leading zero if the number is less than 10 (for example, `01:05:09` instead of `1:5:9`).
 
-go
-Copy code
+```
        if (hours < 10) lcd.print("0");
        lcd.print(hours);
-markdown
-Copy code
+```
 
 * **Bottom line:** Displays the total accumulated dose `accumulatedDose_uSv` with high precision (4 decimal places) and the unit `uSv`.
 
