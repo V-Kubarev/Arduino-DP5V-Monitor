@@ -225,3 +225,4 @@ GNU General Public License v3.0
 -  [Firmware flowchart](docs/flowchart.md)
 -  [Mathematical model](docs/math_model.md)
 -  [Limitations and assumptions](docs/limitations.md)
+-  [List of potential improvements](docs/TODO.md)
