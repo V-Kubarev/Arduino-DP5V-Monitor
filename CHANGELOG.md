@@ -15,12 +15,14 @@
   - Automatic switch to fast response mode when CPS exceeds 3.0.
   - Automatic return to stable background mode when CPS drops below 1.5.
   - Built-in hysteresis prevents frequent window switching.
+- **Added boot screen:** On power-on, the device name and firmware version are displayed for 2.5 seconds.
 
 - **Динамическое окно усреднения для расчёта CPS**
   - Адаптивная длина окна усреднения (5 с ↔ 30 с) в зависимости от уровня радиации.
   - Автоматический переход в быстрый режим при CPS > 3.0.
   - Автоматический возврат в стабильный фоновый режим при CPS < 1.5.
   - Гистерезис предотвращает частые переключения режима.
+- **Добавлен экран загрузки:** При включении прибора на 2.5 секунды отображается его название и версия прошивки.
 
 ### Changed
 - CPS, мощность дозы (µSv/h), эквивалент Б-8 и статистическая погрешность теперь рассчитываются с использованием **динамической длины окна** вместо фиксированного 30-секундного окна.
