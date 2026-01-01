@@ -216,6 +216,7 @@ GNU General Public License v3.0
 -  [Блок-схема алгоритма](docs/flowchart.md)
 -  [Математическая модель](docs/math_model.md)
 -  [Ограничения и допущения](docs/limitations.md)
+-  [Список возможных улучшений](docs/TODO.md)
 
 ### us English
 
