@@ -7,6 +7,49 @@
 
 ---
 
+## [0.2.2] — 2026-01-01
+
+### Added
+- **Dynamic averaging window for CPS calculation**
+  - Adaptive sliding window length (5 s ↔ 30 s) depending on radiation level.
+  - Automatic switch to fast response mode when CPS exceeds 3.0.
+  - Automatic return to stable background mode when CPS drops below 1.5.
+  - Built-in hysteresis prevents frequent window switching.
+
+- **Динамическое окно усреднения для расчёта CPS**
+  - Адаптивная длина окна усреднения (5 с ↔ 30 с) в зависимости от уровня радиации.
+  - Автоматический переход в быстрый режим при CPS > 3.0.
+  - Автоматический возврат в стабильный фоновый режим при CPS < 1.5.
+  - Гистерезис предотвращает частые переключения режима.
+
+### Changed
+- CPS, мощность дозы (µSv/h), эквивалент Б-8 и статистическая погрешность теперь рассчитываются с использованием **динамической длины окна** вместо фиксированного 30-секундного окна.
+- Улучшена реакция прибора на резкие изменения уровня радиации при сохранении стабильных показаний на фоне.
+
+- CPS, dose rate (µSv/h), B-8 equivalent and statistical error are now calculated using a **dynamic averaging window** instead of a fixed 30 s window.
+- Improved responsiveness to rapid radiation level changes while maintaining stable background readings.
+
+### Unchanged
+- Логика подсчёта импульсов, обработка прерываний и программное мёртвое время.
+- Метод накопления дозы (интеграция по времени остаётся статистически корректной).
+- Аппаратный интерфейс (LCD, пищалка, светодиод, кнопка).
+- Калибровочные коэффициенты и физическая модель измерений.
+
+- Pulse counting logic, interrupt handling and software dead time.
+- Dose accumulation method (time-integrated dose remains statistically correct).
+- Hardware interface (LCD, buzzer, LED, button behavior).
+- Calibration constants and physical measurement model.
+
+### Notes
+- Динамическое окно влияет **только на отображаемую мощность дозы**, накопленная доза не искажается.
+- Алгоритм соответствует практике контрольных дозиметрических приборов (IEC 60846-1 по методике).
+
+- The dynamic window affects **displayed dose rate only**; accumulated dose accuracy is preserved.
+- The algorithm behavior is consistent with control/survey meter practices (IEC 60846-1 methodology).
+
+
+---
+
  ## [0.2.1] — 2025-12-28
  ### Added
 - Добавлена визуальная индикация каждого регистрируемого импульса (короткая вспышка встроенного светодиода).
