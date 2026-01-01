@@ -286,6 +286,61 @@ That is why, to achieve maximum accuracy, each assembled device should ideally b
 
 ---
 
+  ## Principle of B-8 Equivalent Calculation (CPM)
+
+  On the main screen of the device, in addition to the dose rate, a value labeled B8 is displayed. This value represents not a dosimetric, but a
+  radiometric quantity, intended for a specific practical task — checking the device's operability using a control source.
+
+  Purpose: From Dose to Particle Count
+
+  It is important to understand the fundamental difference between the two main quantities displayed by the device:
+
+   * Dose Rate (µSv/h): This is a dosimetric quantity that attempts to estimate the biological effect of ionizing radiation (primarily gamma) on
+     humans. It depends on the calibration factor and radiation energy.
+   * Count Rate (CPS/CPM): This is a radiometric quantity that simply shows how many events (decays) the Geiger counter registers per unit of time. It
+     does not attempt to assess the biological effect.
+
+  The B-8 control source, built into the DP-5V, is a beta source. Converting readings from a pure beta source into Sieverts (which are standardized for
+  gamma and X-ray radiation) is physically incorrect. The proper way to assess its activity is to count how many beta particles it emits.
+
+  Therefore, the B8 value on the screen is Counts Per Minute (CPM).
+
+  Implementation in Code
+
+  1. Source Data
+
+  The averaged cps value (average counts per second) is used as the basis.
+
+  2. Conversion Formula
+
+  To convert the count rate from "per second" to "per minute," simply multiply the value by 60.
+
+  > CPM = CPS * 60
+
+  3. Code
+
+  In the firmware, this is implemented using a separate constant for clarity:
+```
+   // Conversion factor "per second" -> "per minute"
+   const float CPS_TO_B8 = 60.0;
+   
+   // ...
+   
+   // B-8 equivalent calculation (i.e., CPM)
+   unsigned long b8Value = (unsigned long)(cps * CPS_TO_B8);
+```
+  The result is cast to an unsigned long integer type for convenient display on the screen.
+
+  Practical Application
+
+  When performing the operability check of the device using the DP-5V's built-in B-8 source, the user should refer specifically to the `B8:` value
+  (i.e., CPM) on the screen.
+
+  By comparing the obtained CPM value with the reference or previously measured value for that source (if known), one can assess the health and current
+  sensitivity of the Geiger counter. This is a much more accurate verification method than attempting to assess a beta source in Sieverts.
+
+---
+
 ## Algorithm for Calculating Statistical Error
 
 In addition to the dose rate value itself, the device also calculates and displays the relative statistical measurement error as a percentage. This parameter shows how much the current readings can be “trusted”.
