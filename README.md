@@ -2,6 +2,7 @@
 
 # Самодельный дозиметр-радиометр на базе Arduino и ДП-5В
 
+[Version: 0.3.0](firmware/arduino/geiger_0.3.0/geiger_0.3.0.ino)
 [Version: 0.2.0](firmware/arduino/geiger_0.2.0/geiger_0.2.0.ino)
 
 ## 🇷🇺 Описание
