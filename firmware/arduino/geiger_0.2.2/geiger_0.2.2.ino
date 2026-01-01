@@ -1,31 +1,31 @@
 /*
-       * DP-5V Arduino Geiger Counter Firmware
-       *
-       * Copyright (C) 2025 Arduino-DP5V-Monitor
-       *
-       * This program is free software: you can redistribute it and/or modify
-       * it under the terms of the GNU General Public License as published by
-       * the Free Software Foundation, either version 3 of the License, or
-       * (at your option) any later version.
-      *
-      * This program is distributed in the hope that it will be useful,
-      * but WITHOUT ANY WARRANTY; without even the implied warranty of
-      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-      * GNU General Public License for more details.
-      *
-      * You should have received a copy of the GNU General Public License
-      * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-      */
+* DP-5V Arduino Geiger Counter Firmware
+*
+* Copyright (C) 2025 Arduino-DP5V-Monitor
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
 /*
-       ============================
-       Hardware configuration
-       Аппаратная конфигурация
-       ============================
-     */
+============================
+Hardware configuration
+Аппаратная конфигурация
+============================
+*/
 
 #define GEIGER_PIN 2  // Geiger counter input (interrupt)
 #define BUZZER_PIN 7  // Buzzer (optional)
@@ -34,11 +34,11 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 /*
-       ============================
-       Measurement parameters
-       Параметры измерений
-       ============================
-     */
+============================
+Measurement parameters
+Параметры измерений
+============================
+*/
 
 // CPS -> µSv/h conversion factor (background calibrated)
 // Коэффициент CPS -> мкЗв/ч (калиброван по фону ДКГ-03Д)
@@ -57,11 +57,11 @@ const float CPS_TO_B8 = 60.0;
 #define DEAD_TIME_US 20000
 
 /*
-       ============================
-       Dynamic Window Parameters
-       Параметры динамического окна
-       ============================
-     */
+============================
+Dynamic Window Parameters
+Параметры динамического окна
+============================
+*/
 #define SLOW_WINDOW_SECONDS 30  // Slow window for background stability / Длинное окно для стабильности на фоне
 #define FAST_WINDOW_SECONDS 5   // Fast window for quick reaction / Короткое окно для быстрой реакции
 #define CPS_THRESHOLD_FAST 3.0  // CPS threshold to switch to fast mode / Порог CPS для перехода в быстрый режим
@@ -69,21 +69,21 @@ const float CPS_TO_B8 = 60.0;
 
 
 /*
-       ============================
-       Button timing
-       Тайминги кнопки
-       ============================
-     */
+============================
+Button timing
+Тайминги кнопки
+============================
+*/
 
 #define DEBOUNCE_MS 200
 #define LONG_PRESS_MS 1500
 
 /*
-       ============================
-       Global variables
-       Глобальные переменные
-       ============================
-     */
+============================
+Global variables
+Глобальные переменные
+============================
+*/
 
 volatile unsigned long pulseCount = 0;
 volatile unsigned long lastPulseTime = 0;
@@ -130,11 +130,11 @@ enum DisplayMode {
 DisplayMode displayMode = DISPLAY_MAIN;
 
 /*
-      ============================
-      Interrupt Service Routine
-      Обработчик прерывания
-      ============================
-    */
+============================
+Interrupt Service Routine
+Обработчик прерывания
+============================
+*/
 
 void geigerISR() {
   unsigned long now = micros();
@@ -149,11 +149,11 @@ void geigerISR() {
 }
 
 /*
-      ============================
-      Reset all measurements
-      Сброс всех измерений
-      ============================
-    */
+============================
+Reset all measurements
+Сброс всех измерений
+============================
+*/
 
 void resetMeasurements() {
   noInterrupts();
@@ -171,10 +171,10 @@ void resetMeasurements() {
 }
 
 /*
-      ============================
-      Setup
-      ============================
-    */
+============================
+Setup
+============================
+*/
 
 void setup() {
   pinMode(GEIGER_PIN, INPUT_PULLUP);
@@ -186,25 +186,31 @@ void setup() {
 
   lcd.init();
   lcd.backlight();
+
+  lcd.setCursor(0, 0);
+  lcd.print("DP-5 Monitor");
+  lcd.setCursor(0, 1);
+  lcd.print("ver. 0.2.2");
+  delay(2500);
   lcd.clear();
 }
 
 /*
-      ============================
-      Main loop
-      ============================
-    */
+============================
+Main loop
+============================
+*/
 
 void loop() {
 
   unsigned long nowMillis = millis();
 
-  /*
-        ============================
-        Beep & LED flash trigger
-        Триггер звука и светодиода
-        ============================
-      */
+/*
+============================
+Beep & LED flash trigger
+Триггер звука и светодиода
+============================
+*/
 
   if (beepFlag) {
     digitalWrite(ledPin, HIGH);
@@ -222,11 +228,11 @@ void loop() {
   }
 
   /*
-        ============================
-        Button handling
-        Обработка кнопки
-        ============================
-      */
+  ============================
+  Button handling
+  Обработка кнопки
+  ============================
+  */
 
   bool buttonState = digitalRead(BUTTON_PIN);
 
@@ -257,11 +263,11 @@ void loop() {
   lastButtonState = buttonState;
 
   /*
-        ============================
-        Once per second processing
-        Обработка раз в секунду
-        ============================
-      */
+  ============================
+  Once per second processing
+  Обработка раз в секунду
+  ============================
+  */
 
   if (nowMillis - lastSecondMillis >= 1000) {
     lastSecondMillis += 1000;
@@ -283,11 +289,11 @@ void loop() {
 
 
     /*
-          ============================
-          Dynamic window logic
-          Логика динамического окна
-          ============================
-        */
+    ============================
+    Dynamic window logic
+    Логика динамического окна
+    ============================
+    */
 
     // First, calculate a preliminary CPS based on the *current* window to make a decision
     // Сначала рассчитываем "предварительный" CPS по *текущему* окну, чтобы принять решение
@@ -313,11 +319,11 @@ void loop() {
 
 
     /*
-          ============================
-          Sum pulses in DYNAMIC window
-          Сумма импульсов в ДИНАМИЧЕСКОМ окне
-          ============================
-        */
+    ============================
+    Sum pulses in DYNAMIC window
+    Сумма импульсов в ДИНАМИЧЕСКОМ окне
+    ============================
+    */
 
     // Recalculate the sum, but now for the window of the desired length
     // Пересчитываем сумму, но уже для окна нужной нам длины
@@ -330,11 +336,11 @@ void loop() {
     }
 
     /*
-          ============================
-          CPS, CPM (B-8) and dose calculation
-          Расчёт CPS, CPM (Б-8) и дозы
-          ============================
-        */
+    ============================
+    CPS, CPM (B-8) and dose calculation
+    Расчёт CPS, CPM (Б-8) и дозы
+    ============================
+    */
 
     // The average is now calculated over the dynamic window
     // Теперь среднее считается по динамическому окну
@@ -359,11 +365,11 @@ void loop() {
     }
 
     /*
-          ============================
-          LCD output
-          Вывод на дисплей
-          ============================
-        */
+    ============================
+    LCD output
+    Вывод на дисплей
+    ============================
+    */
 
     if (displayMode == DISPLAY_MAIN) {
 
