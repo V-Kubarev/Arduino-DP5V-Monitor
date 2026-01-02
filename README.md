@@ -5,6 +5,9 @@
 * [Version: 0.2.0](firmware/arduino/geiger_0.2.0/geiger_0.2.0.ino)
 
 ---
+![Собранный дозиметр на базе Arduino и ДП-5В](assets/device_photo_400.jpg)
+---
+
 
 ## 🇷🇺 Описание
 
