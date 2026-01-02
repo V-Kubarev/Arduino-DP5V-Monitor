@@ -49,9 +49,9 @@ const float CPS_TO_USVH = 0.34;
 const float CPS_TO_B8 = 60.0;
 
 // Physical dead time of the Geiger tube (in SECONDS!)
-// !!! ЗАМЕНИТЕ НА ПАСПОРТНОЕ ЗНАЧЕНИЕ ВАШЕЙ ТРУБКИ !!! (например, 200 мкс = 0.0002 с)
+// !!! ЗАМЕНИТЕ НА ПАСПОРТНОЕ ЗНАЧЕНИЕ ВАШЕЙ ТРУБКИ !!! (например, 190 мкс = 0.00019 с)
 // Физическое мертвое время трубки (в СЕКУНДАХ!)
-const float TUBE_DEAD_TIME_S = 0.0002;
+const float TUBE_DEAD_TIME_S = 0.00019;
 
 // Maximum sliding window duration for the buffer (seconds)
 // Максимальная длительность скользящего окна для буфера (сек)
