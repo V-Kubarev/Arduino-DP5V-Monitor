@@ -214,8 +214,6 @@ windowPulses += cpsBuffer[i];
 }
 ```
 
-
-
 The resulting value `windowPulses` is the total number of pulses over the last 30 seconds. To find the average value per second (CPS), this sum is divided by the window duration.
 
 ```
@@ -228,6 +226,86 @@ This averaged CPS value is then used for all further calculations (dose rate, er
 
 * **Stability:** The algorithm effectively smooths random fluctuations, providing the user with a stable and easy-to-read value.
 * **Relevance:** Unlike simple accumulation, the method uses only fresh data. If the radiation situation changes (for example, you bring the device closer to a source), the readings will smoothly and predictably update to the new level within 30 seconds.
+
+---
+
+  ## Principle of the Dynamic Sliding Window
+
+  Primary Goal: To make the device simultaneously stable when measuring low background radiation and responsive when detecting radiation sources.
+
+  The Problem with a Static Window
+
+  A classic sliding window (as used in earlier versions) has a fixed length (e.g., 30 seconds). This creates a trade-off:
+
+   * Long window (30 sec): Ideal for measuring background radiation. It perfectly smooths out random spikes and provides very stable, averaged
+     readings. But it reacts very slowly to changes. If you bring the device to a source, it will take up to 30 seconds for the readings to reach their
+     true value.
+   * Short window (e.g., 5 sec): Ideal for searching. It reacts almost instantly to changes in the background. But when measuring low background, its
+     readings will be very "noisy" and unstable, constantly jumping.
+
+  The Solution: On-the-Fly Adaptation
+
+  The dynamic window algorithm solves this problem by automatically changing the averaging duration depending on the current radiation environment. It
+  operates on a "best of both worlds" principle.
+
+  > Analogy: Imagine you are driving a car.
+  > *   *On an empty highway (low background):* You look far ahead, assessing the overall picture (a long window is used).
+  > *   *In dense city traffic (high background):* You focus on the few meters directly in front of your hood to react instantly to the maneuvers of
+  other drivers (a short window is used).
+
+  Implementation in Code
+
+  It is important to understand that the physical buffer for data in memory is always the same size (30 cells). What changes dynamically is only which
+  part of this buffer we use to calculate the average value at any given moment.
+
+  1. Making a Decision
+
+  Every second, the program looks at the already averaged cps value and decides what window length to use for the next calculation.
+```
+        // Thresholds defined in constants
+        #define CPS_THRESHOLD_FAST  3.0 // Threshold to switch to fast mode
+        #define CPS_THRESHOLD_SLOW  1.5 // Threshold to switch back to slow mode
+    
+        // ...
+    
+        // If the average CPS exceeds the threshold, switch to fast mode
+        if (previous_cps > CPS_THRESHOLD_FAST) {
+          currentWindowDuration = FAST_WINDOW_SECONDS; // Becomes 5 sec
+        }
+        // If the average CPS drops below the other threshold, switch back to slow mode
+        else if (previous_cps < CPS_THRESHOLD_SLOW) {
+          currentWindowDuration = SLOW_WINDOW_SECONDS; // Becomes 30 sec
+        }
+```
+  Hysteresis: Note that the thresholds for enabling and disabling the fast mode are different (3.0 and 1.5). This is done to avoid "jittering" between
+  modes when the CPS fluctuates around a single value.
+
+  2. Dynamic Summation
+
+  After currentWindowDuration is determined (5 or 30), the summation loop is initiated. It does not sum all 30 cells, but only the last N values, where
+  `N = currentWindowDuration`.
+```
+       // Recalculate the sum, but now for the window of the desired length
+       unsigned long windowPulses = 0;
+       for (unsigned int i = 0; i < currentWindowDuration; i++) {
+         // Go "backwards" through the circular buffer from the current position
+         int readIndex = (bufferIndex - 1 - i + WINDOW_SECONDS) % WINDOW_SECONDS;
+         windowPulses += cpsBuffer[readIndex];
+       }
+```
+  This loop always takes only the "freshest" data in the quantity needed at the moment.
+
+  3. Calculating the Average
+
+  The final CPS value is calculated by dividing by the current (dynamic) window duration, not the fixed one.
+  ```
+       // The average is now calculated over the dynamic window
+       float cps = (float)windowPulses / (float)currentWindowDuration;
+```
+  Conclusion
+
+  Thus, your device constantly adapts to the surrounding environment: it provides maximum accuracy and stability during background measurements and
+  maximum reaction speed when it is truly needed — when searching for sources and in areas with elevated radiation levels.
 
 ---
 
