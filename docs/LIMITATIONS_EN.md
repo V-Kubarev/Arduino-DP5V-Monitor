@@ -1,4 +1,4 @@
- # Limitations and Assumptions of the Project (v0.3.0)
+ # Limitations and Assumptions of the Project (0.3.0)
 
   This document describes the known limitations of the hardware and software parts of the DIY dosimeter-radiometer based on Arduino and DP-5V, as well
   as the assumptions made during the development of the measurement and data processing algorithms.
@@ -110,3 +110,4 @@
    - Hardware modernization;
    - Professional calibration;
    - Metrological certification.
+
