@@ -309,6 +309,80 @@ This averaged CPS value is then used for all further calculations (dose rate, er
 
 ---
 
+  ## Principle of Physical Dead Time Correction for the Tube
+
+  The main goal of the algorithm is to improve the accuracy of measurements by mathematically compensating for the physical limitation of the
+  Geiger-Müller counter known as "dead time." This allows for obtaining reliable count rate data across a wide range, especially at high levels of
+  ionizing radiation.
+
+  Problem: Counter "Saturation" at High Dose Rates
+
+  After registering an ionizing particle and the subsequent gas discharge, any Geiger-Müller counter requires a finite period of time to return to its
+  initial state, in which it is again capable of registering the next particle. This recovery period, called physical dead time (`τ`, tau), is a
+  fundamental characteristic of the detector.
+
+   * At low radiation intensities, when the interval between particles is large, this effect is negligible.
+   * At high intensities, when particles arrive very frequently, a significant portion of them hit the detector while it is still in its "dead" state.
+     These events are not registered, leading to a systematic non-linear error – an underestimation of the true count rate.
+
+  Analogy: Imagine a high-speed camera with a flash trying to capture as many individual events (e.g., lightning strikes) as possible during a
+  thunderstorm. After each photo, the flash needs time to recharge (τ). If lightning strikes are infrequent, the camera can capture each one. But
+  during a strong thunderstorm, many lightning strikes will occur while the camera's flash is recharging, and these events will not be captured.
+
+  Solution: Mathematical Correction
+
+  The solution involves mathematically correcting the measured count rate (N_measured) to obtain an estimate of the true count rate (N_true), what it
+  would have been in the absence of dead time. For a non-paralyzable counter model (where an event arriving during dead time is simply ignored), the
+  following formula is used:
+
+  > N_true = N_measured / (1 - N_measured * τ)
+
+  Logic of the formula:
+
+   * The term `N_measured * τ` calculates the total fraction of time within a one-second interval during which the detector was non-operational
+     ("dead") due to processing previous events.
+   * The term `1 - (N_measured * τ)` determines the fraction of time during which the detector was operational ("live") and ready to register new
+     particles.
+   * By dividing the measured number of pulses (N_measured) by the fraction of "live" time, we normalize the result, obtaining an estimate of how many
+     pulses would have been registered if the detector had been operational 100% of the time.
+
+  Implementation in Code
+
+  The algorithm is implemented in the main program loop, after the stage of averaging the count rate using the dynamic sliding window.
+
+  1. Defining the τ parameter
+
+  At the beginning of the code, a constant corresponding to the datasheet specification of the counter used, expressed in seconds, is defined. The
+  accuracy of this constant directly affects the accuracy of the compensation.
+```
+       // Physical dead time of the Geiger tube (in SECONDS!)
+       // !!! REPLACE WITH THE DATASHEET VALUE OF YOUR TUBE !!! (e.g., 190 µs = 0.00019 s)
+       const float TUBE_DEAD_TIME_S = 0.00019;
+```
+  2. Computational Core
+```
+        // The average is now calculated over the dynamic window
+        // Calculated measured ("raw") count rate
+        float measured_cps = (float)windowPulses / (float)currentWindowDuration;
+    
+        // --- Dead Time Compensation ---
+        // The formula is applied to estimate the true count rate
+        float true_cps = measured_cps / (1.0f - measured_cps * TUBE_DEAD_TIME_S);
+    
+        // Use the corrected 'true_cps' for all subsequent calculations
+        // All further calculations (dose rate, CPM) use the corrected value
+        float doseRate_uSv = true_cps * CPS_TO_USVH;
+        unsigned long b8Value = (unsigned long)(true_cps * CPS_TO_B8);
+   
+        // The main 'cps' variable for display is the corrected one
+        // The main 'cps' variable for display now uses the corrected value
+        float cps = true_cps;
+```
+  Thus, the firmware first obtains an averaged, but underestimated measured_cps value, then mathematically corrects it to true_cps, and then uses this
+  more accurate value for all subsequent calculations and display.
+
+---
+
 ## Principle of Converting CPS to Dose Rate (µSv/h)
 
 One of the central algorithms of the dosimeter is converting “raw” data from the Geiger counter into commonly accepted measurement units that reflect the biological impact of radiation.
