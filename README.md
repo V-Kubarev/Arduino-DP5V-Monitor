@@ -216,7 +216,7 @@ GNU General Public License v3.0
 -  [Архитектура проекта](docs/architecture.md)
 -  [Блок-схема алгоритма](docs/flowchart.md)
 -  [Математическая модель](docs/math_model.md)
--  [Ограничения и допущения](docs/limitations.md)
+-  [Ограничения и допущения](docs/LIMITATIONS_RU.md)
 -  [Список возможных улучшений](docs/TODO.md)
 
 ### us English
@@ -225,5 +225,5 @@ GNU General Public License v3.0
 -  [Project architecture](docs/architecture.md)
 -  [Firmware flowchart](docs/flowchart.md)
 -  [Mathematical model](docs/math_model.md)
--  [Limitations and assumptions](docs/limitations.md)
+-  [Limitations and assumptions](docs/LIMITATIONS_EN.md)
 -  [List of potential improvements](docs/TODO.md)
