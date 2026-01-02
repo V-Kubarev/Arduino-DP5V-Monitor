@@ -138,6 +138,7 @@ This project is intended for **educational, experimental, and research purposes*
 > 1.  **Пин `D2` используется как внешнее прерывание (INT0)**, что гарантирует надёжный подсчёт всех импульсов.
 > 2.  Для пина `D2` в коде включен **внутренний подтягивающий резистор (`INPUT_PULLUP`)**. Это означает, что для регистрации импульса вход должен быть "замкнут" на землю (GND).
 > 3.  **Аудиовыход дозиметра ДП-5В НЕ ЯВЛЯЕТСЯ TTL-совместимым сигналом!** Для надежной и стабильной работы прибора рекомендуется использовать простейшую схему согласования (например, на одном транзисторе). Ее задача — усилить слабый импульс и превратить его в четкий цифровой сигнал (0-5В), который Arduino гарантированно распознает.
+> 4.  При прямом подключении поляронсть аудиовыхода ДП-5В важна. Если нет прерываний, то смените полярность!
 
 ---
 ![Схема подключения Arduino и ДП-5В](assets/connection_diagram_600.jpg)
@@ -156,6 +157,7 @@ This project is intended for **educational, experimental, and research purposes*
 > 1.  **Pin `D2` is used as an external interrupt (INT0)**, which ensures reliable counting of all pulses.
 > 2.  The code enables the **internal pull-up resistor (`INPUT_PULLUP`)** for pin `D2`. This means that to register a pulse, the input must be pulled to ground (GND).
 > 3.  **The audio output of the DP-5V dosimeter is NOT a TTL-compatible signal!** For reliable and stable operation of the device, it is recommended to use a simple matching circuit (for example, one with a single transistor). Its purpose is to amplify a weak pulse and convert it into a clear digital signal (0-5V) that the Arduino is guaranteed to recognize.
+> 4. When connecting directly, the polarity of the DP-5V audio output is important. If there are no interruptions, reverse the polarity!
 
 ---
 
