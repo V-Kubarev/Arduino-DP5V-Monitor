@@ -8,7 +8,7 @@
 ---
 
 ## [0.3.1] — 2026-01-03
-
+---
 ### Added
 
 #### Adaptive software dead time (anti-bounce)
@@ -47,7 +47,7 @@
 
 - Добавлен визуальный индикатор режима антидребезга (S / M / F) на основном экране.
 
-
+---
 ### Changed
 
 - Fixed software dead time (DEAD_TIME_US) replaced with adaptive runtime-controlled value (dynamicDeadTime_us).
@@ -68,7 +68,7 @@
 
 - Обновлён номер версии прошивки до 0.3.1.
 
-
+---
 
 ### Unchanged
 
@@ -103,7 +103,7 @@
 
 - Калибровочные коэффициенты CPS → µSv/h и CPS → Б-8.
 
-
+---
 ### Notes
 
 - Adaptive software dead time increases usable CPS range without compromising background stability.
