@@ -8,7 +8,7 @@
 ---
 
 ## [0.3.1] — 2026-01-03
----
+
 ### Added
 
 #### Adaptive software dead time (anti-bounce)
