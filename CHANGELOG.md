@@ -7,6 +7,120 @@
 
 ---
 
+## [0.3.1] — 2026-01-03
+
+### Added
+
+#### Adaptive software dead time (anti-bounce)
+
+- Implemented adaptive software dead time for interrupt pulse filtering.
+
+- Software dead time is now dynamically adjusted based on averaged CPS value.
+
+- Dead time values are automatically selected:
+
+* 3000 µs — background / low CPS
+
+*2500 µs — elevated background
+
+* 2000 µs — high count rate (upper reliable range)
+
+- Adaptive dead time is applied only to interrupt filtering and does not affect physical dead time compensation.
+
+- Optional on-screen indicator (S / M / F) shows current dead time mode.
+
+#### Адаптивное программное мёртвое время (антидребезг)
+
+- Реализовано адаптивное программное мёртвое время для фильтрации импульсов в прерывании.
+
+- Программное мёртвое время теперь автоматически подбирается на основе усреднённого CPS.
+
+- Используются фиксированные уровни:
+
+* 3000 мкс — фон / низкий уровень счёта
+
+* 2500 мкс — повышенный фон
+
+* 2000 мкс — высокий уровень счёта (верхний достоверный диапазон)
+
+- Адаптивное мёртвое время влияет только на программный антидребезг и не вмешивается в физическую компенсацию мёртвого времени трубки.
+
+- Добавлен визуальный индикатор режима антидребезга (S / M / F) на основном экране.
+
+
+### Changed
+
+- Fixed software dead time (DEAD_TIME_US) replaced with adaptive runtime-controlled value (dynamicDeadTime_us).
+
+- Interrupt Service Routine now uses adaptive dead time instead of compile-time constant.
+
+- Initial software dead time reduced from 20 ms to 3 ms to extend measurable CPS range.
+
+- Firmware version updated to 0.3.1.
+
+### Изменено
+
+- Фиксированное программное мёртвое время (DEAD_TIME_US) заменено на адаптивное (dynamicDeadTime_us).
+
+- Обработчик прерываний теперь использует динамически обновляемое мёртвое время.
+
+- Начальное программное мёртвое время уменьшено с 20 мс до 3 мс для расширения диапазона измерений.
+
+- Обновлён номер версии прошивки до 0.3.1.
+
+
+
+### Unchanged
+
+- Physical dead-time compensation model (non-paralyzable).
+
+- Dynamic averaging window with hysteresis (5 s ↔ 30 s).
+
+- Dose rate, CPS and B-8 calculation methodology.
+
+- Dose accumulation logic and time integration.
+
+- Pulse counting architecture and interrupt-based measurement.
+
+- Hardware interface (LCD, buzzer, LED, button behavior).
+
+- Calibration constants CPS → µSv/h and CPS → B-8.
+
+
+### Без изменений
+
+- Модель компенсации физического мёртвого времени трубки (непарализуемая).
+
+- Динамическое окно усреднения с гистерезисом (5 с ↔ 30 с).
+
+- Методика расчёта CPS, мощности дозы и эквивалента Б-8.
+
+- Логика накопления дозы и интеграция по времени.
+
+- Архитектура подсчёта импульсов и работа через прерывания.
+
+- Аппаратный интерфейс (LCD, пищалка, светодиод, кнопка).
+
+- Калибровочные коэффициенты CPS → µSv/h и CPS → Б-8.
+
+
+### Notes
+
+- Adaptive software dead time increases usable CPS range without compromising background stability.
+
+- Dead time adaptation operates on a 1-second timescale and does not introduce ISR jitter.
+
+
+
+### Примечания
+
+- Адаптивный антидребезг расширяет рабочий диапазон CPS без ухудшения стабильности фоновых измерений.
+
+- Обновление мёртвого времени происходит раз в секунду и не вносит нестабильности в ISR.
+
+
+---
+
 ## [0.3.0] — 2026-01-02
 
 ### Added
