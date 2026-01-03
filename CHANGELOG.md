@@ -21,7 +21,7 @@
 
 * 3000 µs — background / low CPS
 
-*2500 µs — elevated background
+* 2500 µs — elevated background
 
 * 2000 µs — high count rate (upper reliable range)
 
