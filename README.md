@@ -242,6 +242,7 @@ You use this project and code at your own risk. The author is not responsible fo
 
 ### 🇷🇺 Русский
 
+-  [Манифест](/manifest_ru.md)
 -  [Принципы работы прошивки](docs/SOFTWARE_RU.md)
 -  [Архитектура проекта](docs/architecture.md)
 -  [Блок-схема алгоритма](docs/flowchart.md)
@@ -251,6 +252,7 @@ You use this project and code at your own risk. The author is not responsible fo
 
 ### us English
 
+-  [Manifest](/manifest_en.md)
 -  [Operating principles of firmware](docs/SOFTWARE_EN.md)
 -  [Project architecture](docs/architecture.md)
 -  [Firmware flowchart](docs/flowchart.md)
